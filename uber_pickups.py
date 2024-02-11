@@ -1,44 +1,28 @@
 import streamlit as st
-import pandas as pd
-import numpy as np
 
-#chamando o objeto streamlit st
-st.title("Welcome to Tracker")
+def main():
+    st.title("Formulário de Transferência de Estoque")
 
+    # Campos do formulário
+    material = st.text_input("Material:")
+    descricao = st.text_area("Descrição:")
+    quantidade = st.number_input("Quantidade:", min_value=1, step=1)
+    estoque_origem = st.selectbox("Estoque Origem:", ["Estoque 1", "Estoque 2", "Estoque 3"])
+    estoque_destino = st.selectbox("Estoque Destino:", ["Estoque 1", "Estoque 2", "Estoque 3"])
 
+    # Botão para submeter o formulário
+    if st.button("Enviar"):
+        # Lógica para processar os dados do formulário
+        processar_formulario(material, descricao, quantidade, estoque_origem, estoque_destino)
 
-#get uber dataset
-DATE_COLUMN = 'date/time'
-DATA_URL = ('https://s3-us-west-2.amazonaws.com/'
-         'streamlit-demo-data/uber-raw-data-sep14.csv.gz')
+def processar_formulario(material, descricao, quantidade, estoque_origem, estoque_destino):
+    # Aqui você pode adicionar a lógica para processar os dados do formulário, por exemplo, salvar em um banco de dados.
+    st.success("Formulário enviado com sucesso!")
+    st.write("Material:", material)
+    st.write("Descrição:", descricao)
+    st.write("Quantidade:", quantidade)
+    st.write("Estoque Origem:", estoque_origem)
+    st.write("Estoque Destino:", estoque_destino)
 
-
-@st.cache_data
-def load_data(nrows):
-    data = pd.read_csv(DATA_URL, nrows=nrows)
-    lowcase = lambda x: str(x).lower()
-    data.rename(lowcase, axis='columns', inplace=True)
-    data[DATE_COLUMN] = pd.to_datetime(data[DATE_COLUMN])
-    return data
-
-
-data_load_state = st.text("Loading ...")
-data = load_data(100000)
-data_load_state.text("Loadind data... Done!")
-
-if st.checkbox('Show raw data'):
-    st.subheader('Raw data')
-    st.write(data)
-
-
-
-hist_values = np.histogram(
-    data[DATE_COLUMN].dt.hour, bins=24, range=(0,24))[0]
-
-
-st.bar_chart(hist_values)
-
-hour_to_filter = st.slider('hour', 0, 23, 17)  # min: 0h, max: 23h, default: 17h
-filtered_data = data[data[DATE_COLUMN].dt.hour == hour_to_filter]
-st.subheader(f'Map of all pickups at {hour_to_filter}:00')
-st.map(filtered_data)
+if __name__ == "__main__":
+    main()
