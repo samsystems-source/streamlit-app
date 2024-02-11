@@ -5,7 +5,7 @@ def main():
     st.title("Sistema de Gestão de Estoque")
 
     # Adiciona um menu na barra lateral
-    menu = st.sidebar.radio("Menu", ["Cadastro", "Pedidos de Materiais", "Programação de Obras", "Relatório", "Sair"])
+    menu = st.topbar.radio("Menu", ["Cadastro", "Pedidos de Materiais", "Programação de Obras", "Relatório", "Sair"])
 
     # Verifica a opção selecionada no menu e chama a função correspondente
     if menu == "Cadastro":
