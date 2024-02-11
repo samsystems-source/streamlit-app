@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 
 def main():
     st.title("Formulário de Transferência de Estoque")
@@ -12,17 +13,25 @@ def main():
 
     # Botão para submeter o formulário
     if st.button("Enviar"):
-        # Lógica para processar os dados do formulário
-        processar_formulario(material, descricao, quantidade, estoque_origem, estoque_destino)
+        # Adiciona os dados do formulário à tabela
+        adicionar_na_tabela(material, descricao, quantidade, estoque_origem, estoque_destino)
 
-def processar_formulario(material, descricao, quantidade, estoque_origem, estoque_destino):
-    # Aqui você pode adicionar a lógica para processar os dados do formulário, por exemplo, salvar em um banco de dados.
-    st.success("Formulário enviado com sucesso!")
-    st.write("Material:", material)
-    st.write("Descrição:", descricao)
-    st.write("Quantidade:", quantidade)
-    st.write("Estoque Origem:", estoque_origem)
-    st.write("Estoque Destino:", estoque_destino)
+def adicionar_na_tabela(material, descricao, quantidade, estoque_origem, estoque_destino):
+    # Tenta carregar a tabela existente
+    try:
+        tabela = pd.read_csv("dados.csv")
+    except FileNotFoundError:
+        tabela = pd.DataFrame(columns=["Material", "Descrição", "Quantidade", "Estoque Origem", "Estoque Destino"])
+
+    # Adiciona os novos dados à tabela
+    nova_linha = pd.DataFrame([[material, descricao, quantidade, estoque_origem, estoque_destino]],
+                              columns=["Material", "Descrição", "Quantidade", "Estoque Origem", "Estoque Destino"])
+    tabela = pd.concat([tabela, nova_linha], ignore_index=True)
+
+    # Salva a tabela atualizada
+    tabela.to_csv("dados.csv", index=False)
+
+    st.success("Dados adicionados à tabela com sucesso!")
 
 if __name__ == "__main__":
     main()
