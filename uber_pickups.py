@@ -4,12 +4,19 @@ import pandas as pd
 def main():
     st.title("Formulário de Transferência de Estoque")
 
-    # Campos do formulário
-    material = st.text_input("Material:")
-    descricao = st.text_area("Descrição:")
-    quantidade = st.number_input("Quantidade:", min_value=1, step=1)
-    estoque_origem = st.selectbox("Estoque Origem:", ["Estoque 1", "Estoque 2", "Estoque 3"])
-    estoque_destino = st.selectbox("Estoque Destino:", ["Estoque 1", "Estoque 2", "Estoque 3"])
+    # Divide a tela em duas colunas
+    col1, col2 = st.columns(2)
+
+    # Campos do formulário na primeira coluna
+    with col1:
+        material = st.text_input("Material:")
+        descricao = st.text_area("Descrição:")
+        quantidade = st.number_input("Quantidade:", min_value=1, step=1)
+
+    # Campos do formulário na segunda coluna
+    with col2:
+        estoque_origem = st.selectbox("Estoque Origem:", ["Estoque 1", "Estoque 2", "Estoque 3"])
+        estoque_destino = st.selectbox("Estoque Destino:", ["Estoque 1", "Estoque 2", "Estoque 3"])
 
     # Botão para submeter o formulário
     if st.button("Enviar"):
